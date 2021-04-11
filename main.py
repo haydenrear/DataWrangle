@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 from django.utils.text import slugify
+import uuid
 
 filespath = '/Users/hayde/IdeaProjects/drools/data/src/main/resources/data/cleaning/'
 
@@ -14,7 +15,6 @@ def breakexcels():
                 os.mkdir(filepath)
             df = pd.read_excel(filespath + file)
             multi_index_and_recurse(df, file, filepath)
-            # getOneColumn(filespath+file, thisfilename)
 
 def get_columns_with_one_unique(df):
     col_with_one_unique = []
@@ -23,7 +23,6 @@ def get_columns_with_one_unique(df):
             col_with_one_unique.append(col)
     return col_with_one_unique
 
-import uuid
 
 def save_to_file(df, filename, filepath):
     columns = []
@@ -69,8 +68,6 @@ def get_unique_values(df, col):
     return df[col].unique()
 
 def recurse(df, filename, filepath):
-    # base case
-    # least number of unique values not all same is equal to number of rows
     tuple = get_column_with_least_unique(df.columns, df, "Date", "Value")
     print(df.head())
     if len(tuple.columns) == 0:
@@ -87,4 +84,4 @@ def find_all_unique(dfs):
            final_dfs.append(df)
     return final_dfs
 
-breakexcels()
+# breakexcels()
