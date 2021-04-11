@@ -6,6 +6,7 @@ import numpy as np
 
 class RemoveColumns:
 
+
     def __init__(self, df, output_filepath):
         self.df = df
         self.cols_to_name = []
@@ -28,6 +29,7 @@ class RemoveColumns:
         self.df = self.df.drop(columns=self.get_cols_to_drop())
         same_cols = self.duplicate_columns()
         self.df = self.df.drop(columns=same_cols)
+        print(self.output_filepath + "/" + slugify(self.filename)+".csv")
         self.df.to_csv(self.output_filepath + "/" + slugify(self.filename) + ".csv")
 
     def get_filename(self):
