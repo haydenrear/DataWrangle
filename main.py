@@ -2,7 +2,7 @@ import os
 import pandas as pd
 from django.utils.text import slugify
 
-filespath = '/Users/hayde/IdeaProjects/drools/data/src/main/resources/data/one/'
+filespath = '/Users/hayde/IdeaProjects/drools/data/src/main/resources/data/cleaning/'
 
 def breakexcels():
     for file in os.listdir(filespath):
@@ -14,30 +14,7 @@ def breakexcels():
                 os.mkdir(filepath)
             df = pd.read_excel(filespath + file)
             multi_index_and_recurse(df, file, filepath)
-
-def getMax(columns):
-    max = 0
-    for column in columns:
-        if 'Sub-Sector' in column:
-            for word in column.split(" "):
-                try:
-                    if int(word) > max:
-                        max = int(word)
-                except:
-                    continue
-    return max
-
-def createLocations(columns):
-    return createLocationMax(getMax(columns))
-
-def createLocationMax(max):
-    return createLocationString(max)
-
-def createLocationString(num):
-    if num == 0:
-        return 'Sub-Sector'
-    else:
-        return 'Sub-Sector Level ' + str(num)
+            # getOneColumn(filespath+file, thisfilename)
 
 def get_columns_with_one_unique(df):
     col_with_one_unique = []
@@ -57,8 +34,6 @@ def save_to_file(df, filename, filepath):
     df=df.drop(columns=columns)
     df.to_csv(filepath+"/"+slugify(filename+str(uuid.uuid4()))[0:240]+".csv")
 
-
-
 def get_column_with_least_unique(columns, df, date_column, value_column):
     least = len(df)+10
     column_name = []
@@ -72,8 +47,6 @@ def get_column_with_least_unique(columns, df, date_column, value_column):
                     least = length_of_unique
                     column_name.clear()
                     column_name.append(column)
-    if len(column_name) > 1:
-        print("problem! greater than one")
     return tuple(column_name, least)
 
 class tuple:
@@ -103,8 +76,9 @@ def recurse(df, filename, filepath):
     if len(tuple.columns) == 0:
         save_to_file(df, filename, filepath)
     else:
-        for unique_value in get_unique_values(df, tuple.columns[0]):
-            recurse(create_index_with_least_unique(df, tuple.columns[0], unique_value), filename, filepath)
+        for column in tuple.columns:
+            for unique_value in get_unique_values(df, column):
+                recurse(create_index_with_least_unique(df, column, unique_value), filename, filepath)
 
 def find_all_unique(dfs):
     final_dfs = []
