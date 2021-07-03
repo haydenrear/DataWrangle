@@ -41,7 +41,7 @@ class RemoveColumns:
         filename = self.remove_letters()
         return filename
 
-    def duplicate_columns(self):
+    def duplicate_columns(self): # stackoverflow
         groups = self.df.columns.to_series().groupby(self.df.dtypes).groups
         dups = []
 
