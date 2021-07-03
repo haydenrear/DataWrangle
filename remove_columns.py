@@ -6,7 +6,6 @@ import numpy as np
 
 class RemoveColumns:
 
-
     def __init__(self, df, output_filepath):
         self.df = df
         self.cols_to_name = []
